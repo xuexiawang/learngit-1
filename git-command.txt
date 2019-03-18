@@ -1,0 +1,59 @@
+git config --global user.name "Your name"
+git config --global user.email "Your email"
+mkdir learngit：创建一个learngit文件
+cd learngit：进入learngit文件
+pwd：查看当前工作目录
+git init：将learngit文件初始化为git仓库
+git add readme.txt：将readme.text文件交给git仓库
+git commit -m "message"：将修改提交给git仓库，message可以是任意值，最好是有意义的，记录修改的内容。
+git status：随时掌握工作区的状态。
+
+git diff：如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
+
+git diff HEAD -- readme.txt：查看工作区readme.txt文件和版本库里面readme.txt文件最新版本的区别。
+git log：查看版本历史记录（或git log --pretty=oneline）
+git reset -- hard HEAD^：回退到上一个版本
+git reset --hard HEAD^^：回到上上个版本（当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100）
+git reset --hard commit id：回到commit id 版本（版本号没必要写全，前几位就可以了，Git会自动去找。当然也不能只写前一两位，因为Git可能会找到多个版本号，就无法确定是哪一个了）
+git reflog：记录每一次提交版本的命令，找到每个版本的commit id.
+撤销修改：
+
+git checkout -- readme.txt：如果工作区做了修改，还没有提交至暂存区，用该命令可以丢弃工作区的修改：
+git reset HEAD readme.txt:如果修改已经提交至暂存区，但是还没有提交至版本库，用该命令可以把暂存区的修改撤销掉（unstage），重新放回工作区。(如果修改已经提交至版本库，但是还没有提交到远程版本库，可以用git reset -- hard HEAD^命令回退版本。）
+删除文件：
+
+rm file：删除工作区文件（这个时候，工作区和版本库就不一致了，可以确定删除文件，或者恢复删除文件）
+git rm file:确定从版本库删除文件，最后并git commit。（只要删除的文件曾经提交到版本库，就可以通过回退版本找回文件，永远不担心误删除。）
+git checkout -- file :误删除，将版本库的文件恢复到工作区。
+ 本地仓库添加到git远程库：
+
+git remote add origin git@github.com:michaelliao/learngit.git：在GitHub上建一个空的learngit仓库（把上面的michaelliao替换成你自己的GitHub账户名）
+git push -u origin master：本地库的所有内容推送到远程库上。（第一次需要加-u，以后推送主分支直接git push origin master）
+git push origin dev：将Dev分支推送到远程库
+ 从git远程库克隆一个本地库：
+
+git clone git@github.com:/michaelliao/gitskills.git:将github上的gitskills仓库克隆到本地
+分支管理：
+
+git checkout -b dev:创建dev分支，并切换到dev分支
+git branch：查看分支，当前分支会有一个*
+git checkout master：切换到master分支
+git merge dev ：合并dev分支到master分支,Git会用Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。
+git merge --no--ff -m "merge with no--ff" dev:强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息.
+git barach -d dev：dev分支工作完成之后删除dev分支
+git branch -D dev：丢弃一个没有被合并过的分支
+git stash：把当前工作现场“储藏”起来，等以后恢复现场后继续工作。（适用场景：当前分支工作还没完成，紧急接到处理其他bug的工作，需要再master分支建一个bug分支，bug修复后再回到当前分支）
+git stash list：查看stash列表
+git stash pop：回复存储的工作区，同时删除stash内容
+git pull：取回远程主机某个分支的更新，再与本地的指定分支合并。
+git rebase：可以对某一段线性提交历史进行编辑、删除、复制、粘贴；因此，合理使用rebase命令可以使我们的提交历史干净、简洁。（不要通过rebase对任何已经提交到公共仓库中的commit进行修改）
+标签管理：
+
+git tag <tagname>:新建一个标签，默认为HEAD，也可以指定一个commit id
+git tag -a <tagname> -m <message> ：指定标签信息
+git tag：查看所有标签
+git push origin <tagname>:将本地标签推送到远程
+git push origin --tags:将本地所有未推送的标签推送到远程
+git tag -d <tagname>:删除一个本地标签
+git push origin :refs/tags/<tagname>:删除一个远程标签（需要先将本地标签删除）
+ 
